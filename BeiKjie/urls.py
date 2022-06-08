@@ -21,6 +21,6 @@ from feedbackApp import urls as feedback_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/login/',include(login_urls)),
-    path('api/feedback/',include(feedback_urls)),
+    path('',include(login_urls)),
+    # path('api/',include(feedback_urls)),
 ]
