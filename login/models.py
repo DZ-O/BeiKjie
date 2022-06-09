@@ -18,7 +18,7 @@ class UserDetail(AbstractUser):
     praise_count = models.IntegerField(default=0, verbose_name='获赞总数', help_text='获赞总数')
     been_read_count = models.IntegerField(default=0, verbose_name='被阅读总数', help_text='被阅读总数')
     SignIn = models.IntegerField(default=0, verbose_name='签到天数', help_text='签到天数')
-    # icon = models.ImageField(d)
+    icon = models.ImageField(default='icon/default.png',upload_to='icon')
     subscribe_to = models.ManyToManyField(to='self',
                                           through='SubscriptionRelactionship',
                                           through_fields=('user', 'subscribed'))

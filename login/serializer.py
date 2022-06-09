@@ -64,11 +64,12 @@ class JWT_User(ModelSerializer):
                        message='手机格式错误')], error_messages={
         'blank': '不能为空'
     })
+    icon = serializers.ImageField(read_only=True)
     sms_code = serializers.CharField(label='验证码', write_only=True)
 
     class Meta:
         model = UserDetail
-        fields = ['id', 'username', 'phone', 'sms_code']
+        fields = ['id', 'username', 'phone', 'sms_code','icon']
 
     def validate(self, attrs):
         attrs.pop('sms_code')
@@ -99,7 +100,7 @@ class EmailLoginSer(ModelSerializer):
 
     class Meta:
         model = UserDetail
-        fields = ['id', 'username', 'email', 'password']
+        fields = ['id', 'username', 'email', 'password','icon']
 
     def validate(self, attrs):
         email = attrs.get('email')
@@ -113,6 +114,7 @@ class EmailLoginSer(ModelSerializer):
                 self.context['token'] = token
                 self.context['username'] = user.username
                 self.context['email'] = user.email
+                self.context['icon'] = user.icon
                 print(user.email)
                 print(user.username)
                 print('a')
@@ -123,35 +125,8 @@ class EmailLoginSer(ModelSerializer):
             raise ValidationError('用户不存在')
 
 
-# 手机登录序列化器
-# class EmailLoginSer(ModelSerializer):
-#     username = serializers.CharField(read_only=True, max_length=8, min_length=1, validators=[
-#         validators.UniqueValidator(queryset=UserDetail.objects.all(), message="用户昵称必须唯一"),
-#         RegexValidator("^[\u4e00-\u9fa5_a-zA-Z0-9]+$", message='昵称不能含有特殊字符')],
-#                                      error_messages={
-#                                          'max_length': '昵称最多8位',
-#                                          'min_length': '昵称至少1位',
-#                                          'blank': '不能为空',
-#                                      })
-#     phone = serializers.IntegerField(validators=[
-#         RegexValidator("^1(3\d|4[5-9]|5[0-35-9]|6[567]|7[0-8]|8\d|9[0-35-9])\d{8}$",
-#                        message='手机格式错误')], error_messages={
-#         'blank': '不能为空'
-#     })
-#     password = serializers.CharField(write_only=True, max_length=18, min_length=6, error_messages={
-#         'max_length': '密码最多18位',
-#         'min_length': '密码至少6位',
-#         'blank': '不能为空'
-#     }, validators=[
-#         RegexValidator("^(?=.*?[a-z])(?=.*?[0-9])([^\\u4E00-\\u9FFF]){6,18}$", message='密码有字母数字组成')], )
-#
-#     sms_code = serializers.CharField(label='验证码', write_only=True)
-#
-#     class Meta:
-#         model = UserDetail
-#         fields = ['id', 'username', 'phone', 'sms_code']
-#
-#     def validate(self, attrs):
-#         attrs.pop('sms_code')
-#         return attrs
-#         return attrs
+# 头像序列化器
+class UserIconSer(ModelSerializer):
+    class Meta:
+        model = UserDetail
+        fields = ['icon']
