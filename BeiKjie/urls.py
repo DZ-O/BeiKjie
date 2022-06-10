@@ -19,12 +19,14 @@ from django.urls import path, include, re_path
 from django.views.static import serve
 
 from login import urls as login_urls
+from articleApp import urls as article_urls
 
 from feedbackApp import urls as feedback_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/',include(login_urls)),
+    path('api/',include(article_urls)),
     re_path('media/(?P<path>.*)', serve, {'document_root': settings.MEDIA_ROOT}),
     # path('api/',include(feedback_urls)),
 ]

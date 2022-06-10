@@ -4,12 +4,12 @@ from django.db import models
 from django.contrib.auth.models import User, AbstractUser
 
 
-# import articleApp
+# 用户信息表
 class UserDetail(AbstractUser):
-    username = models.CharField(blank=True,null=True,unique=True, verbose_name='用户名', help_text="用户名",max_length=10)
-    password = models.CharField(max_length=255,default='',help_text='密码',verbose_name='密码')
-    email = models.EmailField(blank=True,null=True,help_text='邮箱',verbose_name='邮箱')
-    phone = models.CharField(verbose_name='手机号码', help_text="手机号码",max_length=30)
+    username = models.CharField(blank=True, null=True, unique=True, verbose_name='用户名', help_text="用户名", max_length=10)
+    password = models.CharField(max_length=255, default='', help_text='密码', verbose_name='密码')
+    email = models.EmailField(blank=True, null=True, help_text='邮箱', verbose_name='邮箱')
+    phone = models.CharField(verbose_name='手机号码', help_text="手机号码", max_length=30)
     signature = models.CharField(default='神秘客？懒人？', max_length=100, verbose_name="个性签名", help_text="个性签名")
     identity = models.CharField(max_length=10, null=True, verbose_name='身份', help_text="官方身份")
     subscribe_count = models.IntegerField(default=0, verbose_name='关注人数', help_text='关注人数')
@@ -18,7 +18,7 @@ class UserDetail(AbstractUser):
     praise_count = models.IntegerField(default=0, verbose_name='获赞总数', help_text='获赞总数')
     been_read_count = models.IntegerField(default=0, verbose_name='被阅读总数', help_text='被阅读总数')
     SignIn = models.IntegerField(default=0, verbose_name='签到天数', help_text='签到天数')
-    icon = models.ImageField(default='icon/default.png',upload_to='icon')
+    icon = models.ImageField(default='icon/default.png', upload_to='icon')
     subscribe_to = models.ManyToManyField(to='self',
                                           through='SubscriptionRelactionship',
                                           through_fields=('user', 'subscribed'))
@@ -28,21 +28,24 @@ class UserDetail(AbstractUser):
                                         )
 
 
+# 关注关系表表
 class SubscriptionRelactionship(models.Model):
     user = models.ForeignKey(to=UserDetail, on_delete=models.CASCADE, verbose_name='用户id', help_text='用户id')
     subscribed = models.ForeignKey(to=UserDetail, on_delete=models.CASCADE, verbose_name='关注的用户id',
                                    help_text='关注的用户id', related_name='UserDetail1')
 
 
+# 文章分类表
 class ArticleType(models.Model):
     type = models.CharField(max_length=10, verbose_name='文章分类', help_text='文章分类')
 
 
+# 文章标签表
 class ArticleTag(models.Model):
     tag = models.CharField(max_length=10, verbose_name='文章标签', help_text='文章标签')
 
 
-# Create your models here.
+# 文章表.
 class Article(models.Model):
     auth = models.ForeignKey(to=UserDetail, on_delete=models.CASCADE, help_text='作者id', verbose_name='作者id')
     title = models.CharField(max_length=20, verbose_name='文章标题', help_text='文章标题')
@@ -60,17 +63,20 @@ class Article(models.Model):
                                          )
 
 
+# 收藏关系表
 class CollectRelactionship(models.Model):
     user = models.ForeignKey(to=UserDetail, on_delete=models.CASCADE, verbose_name='收藏者id', help_text='收藏者id')
     article = models.ForeignKey(to=Article, on_delete=models.CASCADE, verbose_name='收藏文章id', help_text='收藏文章id')
 
 
+# 文章与标签对应关系表
 class Article2ArticleTag(models.Model):
     article = models.ForeignKey(to=Article, on_delete=models.CASCADE, verbose_name='文章id', help_text='文章id')
     article_tag = models.ForeignKey(to=ArticleTag, on_delete=models.CASCADE, verbose_name='文章标签id',
                                     help_text='文章标签id')
 
 
+# 评论表
 class Comments(models.Model):
     comment_content = models.TextField(verbose_name='评论内容', help_text='评论内容')
     comment_article = models.ForeignKey(to=Article, on_delete=models.CASCADE, verbose_name='评论的文章id',

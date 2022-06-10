@@ -130,3 +130,4 @@ class UserIconSer(ModelSerializer):
     class Meta:
         model = UserDetail
         fields = ['icon']
+

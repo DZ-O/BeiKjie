@@ -5,7 +5,7 @@ from rest_framework.routers import DefaultRouter
 from articleApp import views
 
 router = DefaultRouter()
-# router.register('api/books',views.BookViewSet,basename='books')
+router.register('article',views.ArticleViewSet,basename='文章')
 
 urlpatterns = [
 
